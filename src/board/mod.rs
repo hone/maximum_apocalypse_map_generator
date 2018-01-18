@@ -17,12 +17,12 @@ pub struct Board {
 }
 
 impl Board {
-    pub fn new(num_tiles: &usize) -> Self {
+    pub fn new(num_tiles: usize) -> Self {
         let data = vec![None; num_tiles * num_tiles]; 
 
         let mut board = Board {
             data: data,
-            num_tiles: num_tiles.to_owned(),
+            num_tiles: num_tiles,
             rng: rand::thread_rng(),
             tile_count: 0,
         };

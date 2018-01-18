@@ -12,7 +12,7 @@ fn main() {
     match io::stdin().read_line(&mut input) {
         Ok(_) => {
             match input.trim().parse::<usize>() {
-                Ok(num_tiles) => Board::new(&num_tiles).display(),
+                Ok(num_tiles) => Board::new(num_tiles).display(),
                 Err(error) => eprintln!("Not a valid number: error: {}", error),
             };
         },
