@@ -1,7 +1,15 @@
 [package]
-name = "map_tile_generator"
+name = "maximum_apocalypse_map_generator"
 version = "0.1.0"
 authors = ["Terence Lee <hone02@gmail.com>"]
+
+[lib]
+name = "ma_mapper"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ma_map"
+path = "src/bin.rs"
 
 [dependencies]
 rand = "0.4.2"
