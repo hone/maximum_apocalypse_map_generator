@@ -1,4 +1,4 @@
-use std::slice::Iter;
+use board::rand::{Rng, ThreadRng};
 use self::super::position::Position;
 
 pub enum Direction {
@@ -18,9 +18,10 @@ impl Direction {
         }
     }
 
-    pub fn iter() -> Iter<'static, Direction> {
-        static DIRECTIONS: [Direction; 4] = [Direction::Up, Direction::Down, Direction::Left, Direction::Right];
-        DIRECTIONS.iter()
+    pub fn shuffled(rng: &mut ThreadRng) -> [Direction; 4] {
+        let mut directions: [Direction; 4] = [Direction::Up, Direction::Down, Direction::Left, Direction::Right];
+        rng.shuffle(&mut directions);
+        directions
     }
 }
 
