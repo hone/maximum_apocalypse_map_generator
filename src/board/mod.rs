@@ -135,7 +135,7 @@ mod tests {
     #[test]
     fn it_works() {
         let num_tiles = 23;
-        let board = Board::new(&num_tiles);
+        let board = Board::new(num_tiles);
         let found_tiles = board.data.iter().filter(|i| i.is_some() ).collect::<Vec<&Option<Tile>>>().len();
         println!("");
         board.display();
