@@ -101,19 +101,21 @@ impl Board {
 
 
     fn lay_tiles(&mut self, tile: &Tile) {
-        for direction in Direction::shuffled(&mut self.rng).iter() {
-            let new_tile_option = self.lay_tile_direction(&tile, direction);
-            if new_tile_option.is_some() && self.tile_count < self.num_tiles {
-                self.lay_tiles(&new_tile_option.unwrap());
-            }
+        let direction = &Direction::shuffled(&mut self.rng)[0];
+        let new_tile_option = self.lay_tile_direction(&tile, direction);
+        if new_tile_option.is_some() && self.tile_count < self.num_tiles {
+            self.lay_tiles(&new_tile_option.unwrap());
         }
     }
 
     fn lay_tile_direction(&mut self, tile: &Tile, direction: &Direction) -> Option<Tile> {
-        if self.rng.gen_range(0, 100) > 50 {
-            let new_position = tile.position.add(direction.value());
-            let index = self.index(&new_position);
-            if self.valid_position(&new_position) && self.data[index].is_none() {
+        let new_position = tile.position.add(direction.value());
+        let index = self.index(&new_position);
+        if self.valid_position(&new_position) {
+            let existing_tile = self.data[index];
+            if existing_tile.is_some() {
+                return existing_tile;
+            } else {
                 let new_tile = Tile {
                     value: tile::Value::Normal,
                     position: new_position,
