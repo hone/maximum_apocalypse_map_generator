@@ -7,6 +7,7 @@ mod tile;
 use self::rand::Rng;
 pub use self::direction::Direction;
 pub use self::tile::Tile;
+pub use self::tile::Value;
 pub use self::position::Position;
 
 pub struct Board {
@@ -47,8 +48,8 @@ impl Board {
                 let value = match self.data[index] {
                     Some(tile) => {
                         match tile.value {
-                            tile::Value::Van => 1,
-                            tile::Value::Normal => 2,
+                            Value::Van => 1,
+                            Value::Normal => 2,
                         }
                     }
                     None => 0,
