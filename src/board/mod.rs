@@ -14,25 +14,29 @@ pub struct Board {
     pub data: Vec<Option<Tile>>,
     pub num_tiles: usize,
     pub tile_count: usize,
+    pub width: usize,
+    pub height: usize,
     rng: rand::ThreadRng,
 }
 
 impl Board {
-    pub fn new(num_tiles: usize) -> Self {
-        let data = vec![None; num_tiles * num_tiles]; 
+    pub fn new(num_tiles: usize, width: usize, height: usize) -> Self {
+        let data = vec![None; width * height];
 
         let mut board = Board {
             data: data,
             num_tiles: num_tiles,
             rng: rand::thread_rng(),
             tile_count: 0,
+            width: width,
+            height: height,
         };
         board.generate_board();
         // if not enough tiles, regenerate map
         while board.tile_count < board.num_tiles {
             board.tile_count = 0;
             board.data.clear();
-            for _ in 0..(num_tiles * num_tiles) {
+            for _ in 0..(width * height) {
                 board.data.push(None);
             }
             board.generate_board();
@@ -42,9 +46,9 @@ impl Board {
     }
 
     pub fn display(&self) {
-        for y in (0..self.num_tiles).rev() {
-            for x in 0..self.num_tiles {
-                let index = x + y * self.num_tiles;
+        for y in (0..self.height).rev() {
+            for x in 0..self.width {
+                let index = x + y * self.height;
                 let value = match self.data[index] {
                     Some(tile) => {
                         match tile.value {
@@ -61,19 +65,18 @@ impl Board {
     }
 
     fn index(&self, position: &Position) -> usize {
-        (position.x + position.y * self.num_tiles as isize) as usize
+        (position.x + position.y * self.height as isize) as usize
     }
 
     fn valid_position(&self, position: &Position) -> bool {
-        let num_tiles_isize = self.num_tiles as isize;
         position.x >= 0 &&
-            position.x < num_tiles_isize &&
+            position.x < self.width as isize &&
             position.y >= 0 &&
-            position.y < num_tiles_isize
+            position.y < self.height as isize
     }
 
     fn generate_board(&mut self) {
-        let starting_position = self.rng.gen_range(0, self.num_tiles);
+        let starting_position = self.rng.gen_range(0, self.width);
         let starting_tile = Tile {
             value: tile::Value::Van,
             position: Position {
@@ -135,7 +138,7 @@ mod tests {
     #[test]
     fn it_works() {
         let num_tiles = 23;
-        let board = Board::new(num_tiles);
+        let board = Board::new(num_tiles, num_tiles / 2, num_tiles / 2);
         let found_tiles = board.data.iter().filter(|i| i.is_some() ).collect::<Vec<&Option<Tile>>>().len();
         println!("");
         board.display();
